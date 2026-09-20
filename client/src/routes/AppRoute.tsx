@@ -1,52 +1,91 @@
-// import { Routes, Route, Navigate } from "react-router-dom";
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
+import Home from "../pages/Home";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+import Properties from "../pages/Properties";
+import PropertyDetails from "../pages/PropertyDetails";
+import PublishProperty from "../pages/PublishProperty";
+import MyProperties from "../pages/MyProperty";
+import ReportVacancy from "../pages/ReportVacancy";
+import NotFound from "../pages/NotFound";
+import OwnerProfile from "../pages/OwnerProfile";
+import TenantProfile from "../pages/TenantProfile";
 
-// const AppRoutes = () => {
+interface UserData {
+  id: string;
+  name: string;
+  role?: "tenant" | "landlord" | "admin";
   
+}
 
-//   return (
-//     <Routes>
-//       <Route path="/" element={<Home />} />
-//       <Route
-//         path="/create-edit-shop"
-//         element={userData ? <CreateEditShop /> : <Navigate to="/login" />}
-//       />
-//       <Route
-//         path="/create-item"
-//         element={userData ? <CreateItem /> : <Navigate to="/login" />}
-//       />
-//       <Route
-//         path="/edit-item/:itemId"
-//         element={userData ? <EditItem /> : <Navigate to="/login" />}
-//       />
-//       <Route
-//         path="/login"
-//         element={userData ? <Navigate to="/" /> : <Login />}
-//       />
-//       <Route
-//         path="/signup"
-//         element={userData ? <Navigate to="/" /> : <SignUp />}
-//       />
-//       <Route path="/logout" element={<Navigate to="/" />} />
-//       <Route path="/forgot-password" element={<ForgotPassword />} />
-//       <Route
-//         path="/cart-items"
-//         element={userData ? <CartItems /> : <Navigate to="/login" />}
-//       />
-//       <Route
-//         path="/checkout"
-//         element={userData ? <CheckOut /> : <Navigate to="/login" />}
-//       />
-//       <Route
-//         path="/order-placed"
-//         element={userData ? <OrderPlaced /> : <Navigate to="/login" />}
-//       />
-//       <Route
-//         path="/my-orders"
-//         element={userData ? <MyOrders /> : <Navigate to="/login" />}
-//       />
-//     </Routes>
-//   );
-// };
+interface AppRoutesProps {
+  userData?: UserData | null;
+}
 
-// export default AppRoutes;
+export const AppRoutes: React.FC<AppRoutesProps> = () => {
+  const isAuthenticated = false;
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+
+      <Route
+        path="/login"
+        element={
+          isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          isAuthenticated ? <Navigate to="/dashboard" replace /> : <Register />
+        }
+      />
+
+      <Route path="/properties" element={<Properties />} />
+      <Route path="/properties/:id" element={<PropertyDetails />} />
+
+      <Route
+        path="/publish"
+        element={
+          isAuthenticated ? (
+            <PublishProperty />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="/my-properties"
+        element={
+          isAuthenticated ? <MyProperties /> : <Navigate to="/login" replace />
+        }
+      />
+
+      <Route
+        path="/report-vacancy"
+        element={
+          isAuthenticated ? <ReportVacancy /> : <Navigate to="/login" replace />
+        }
+      />
+
+      <Route
+        path="/owner-profile"
+        element={
+          isAuthenticated ? <OwnerProfile /> : <Navigate to="/login" replace />
+        }
+      />
+      <Route
+        path="/tenant-profile"
+        element={
+          isAuthenticated ? <TenantProfile /> : <Navigate to="/login" replace />
+        }
+      />
+
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
+
+export default AppRoutes;
